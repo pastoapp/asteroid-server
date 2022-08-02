@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  ipfs:
+    image: ipfs/kubo:master-2022-07-06-9ce802f
+    ports:
+      - "0.0.0.0:4001:4001"
+      - "0.0.0.0:5001:5001"
+      - "0.0.0.0:8080:8080"
+    volumes:
+      - ipfs_data:/data/ipfs
+      - ipfs_staging:/export
+    restart: unless-stopped
+    command: ["daemon",
+              "--migrate=true",
+              "--agent-version-suffix=docker",
+              "--enable-pubsub-experiment",
+              "--enable-namesys-pubsub"]
+
+
+volumes:
+  ipfs_staging:
+    driver: local
+  ipfs_data:
+    driver: local
