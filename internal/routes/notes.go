@@ -8,19 +8,21 @@ import (
 	"net/http"
 )
 
+// Notes is a reference to the notes database
 type Notes struct {
 	DB     *orbitdb.Database
 	RGroup *gin.RouterGroup
 }
 
-var notes Notes
-
+// createReq is the request body for creating a new note
 type createReq struct {
 	UID  string `json:"uid" binding:"required"`
 	Note string `json:"note" binding:"required"`
 }
 
+// InitNotes initializes the notes module
 func InitNotes(router *gin.Engine, db *orbitdb.Database) *Notes {
+	// binding all the following routes to /notes
 	group := router.Group("/notes")
 	notes := Notes{
 		DB:     db,
@@ -32,6 +34,7 @@ func InitNotes(router *gin.Engine, db *orbitdb.Database) *Notes {
 	return &notes
 }
 
+// Create uses the request body to create a new note
 func (n Notes) Create(c *gin.Context) {
 	var body createReq
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -39,6 +42,7 @@ func (n Notes) Create(c *gin.Context) {
 		return
 	}
 
+	// convert uid to uuid
 	uid, err := uuid.Parse(body.UID)
 
 	if err != nil {
@@ -46,19 +50,22 @@ func (n Notes) Create(c *gin.Context) {
 		return
 	}
 
+	// create note
 	newNote, err := note.NewNote(body.Note, uid)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	// response
 	c.JSON(http.StatusOK, gin.H{
 		"id":   newNote.ID.String(),
 		"uid":  newNote.UID.String(),
-		"note": newNote.Data,
+		"note": newNote.Data, // Optional for production: Add encryption
 	})
 }
 
+// Find returns a note by id
 func (n Notes) Find(context *gin.Context) {
 	id := context.Param("id")
 

@@ -138,11 +138,4 @@ func (_ Users) response(u *user.User) gin.H {
 	}
 }
 
-// TODO: For production
-//func (u User) update(context *gin.Context) {
-//
-//}
-
-//func (u User) requestToken(context *gin.Context) {
-//
-//}
+// For production, add more CRUD methods here...

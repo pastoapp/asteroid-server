@@ -70,19 +70,4 @@ func TestNewNotes(t *testing.T) {
 			t.Fatalf("Error getting note: %v", err)
 		}
 	})
-
-	t.Run("Get all notes", func(t *testing.T) {
-		for i := 0; i < 10; i++ {
-			_, _ = NewNote(item, tUser.ID)
-		}
-		notes, err := GetAllNotes()
-
-		if err != nil {
-			t.Fatalf("Error getting notes: %v", err)
-		}
-
-		if len(notes) == 0 {
-			t.Fatalf("Error getting notes: %v", err)
-		}
-	})
 }

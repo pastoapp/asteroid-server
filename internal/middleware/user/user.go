@@ -230,6 +230,7 @@ func Find(key string) (User, error) {
 	return *user, nil
 }
 
+// UpdateNotes updates the user notes with a corresponding note id
 func UpdateNotes(uid, noteId string) (*User, error) {
 	// find the existing user
 	u, err := Find(uid)
@@ -271,7 +272,7 @@ func UpdateNotes(uid, noteId string) (*User, error) {
 	}
 
 	// Update the user
-	update, err := db.Update(u.ID.String(), gin.H{
+	_, err = db.Update(u.ID.String(), gin.H{
 		"id":        u.ID.String(),
 		"publicKey": u.PublicKey,
 		"nonce":     u.Nonce,
@@ -280,86 +281,13 @@ func UpdateNotes(uid, noteId string) (*User, error) {
 		"updatedAt": u.UpdatedAt,
 		"notes":     u.Notes,
 	})
+
 	if err != nil {
 		log.Println("Error updating user")
 		return nil, err
 	}
-	log.Println(update)
 
 	return &u, nil
-
-	//
-	//if err != nil {
-	//	log.Println("Failed to find user")
-	//	return nil, err
-	//}
-	//
-	//oldNotes := u.Notes
-	//
-	//if oldNotes == nil {
-	//	oldNotes = make([]string, 0)
-	//}
-	//
-	//user := &User{
-	//	ID:        u.ID,
-	//	PublicKey: u.PublicKey,
-	//	Nonce:     nonce,
-	//	IsAdmin:   u.IsAdmin,
-	//	CreatedAt: time.Now().UTC().Unix(),
-	//	UpdatedAt: time.Now().UTC().Unix(),
-	//	Notes:     append(oldNotes, noteId),
-	//}
-	//
-	//ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	//defer cancel()
-	//
-	//db, err := orbitdb.OpenDatabase(ctx, "default")
-	//
-	//if err != nil {
-	//	log.Println("Could not open user database")
-	//	return nil, err
-	//}
-	//
-	//defer func(db *orbitdb.Database) {
-	//	//err := db.Close()
-	//	//if err != nil {
-	//	//	log.Printf("Could not close user database %v\n", user)
-	//	//}
-	//}(db)
-	//
-	//resp, err := db.Update(u.ID.String(), gin.H{
-	//	"id":        user.ID.String(),
-	//	"publicKey": user.PublicKey,
-	//	"nonce":     user.Nonce,
-	//	"isAdmin":   user.IsAdmin,
-	//	"createdAt": user.CreatedAt,
-	//	"updatedAt": user.UpdatedAt,
-	//	"notes":     user.Notes,
-	//})
-	//
-	//if err != nil {
-	//	log.Println("Could not create user")
-	//	return nil, err
-	//}
-	//
-	//_id := resp["_id"].(string)
-	//
-	//newID, err := uuid.Parse(_id)
-	//
-	//if err != nil {
-	//	log.Println("Could not parse UUID")
-	//	return nil, err
-	//}
-
-	//return &User{
-	//	ID:        newID,
-	//	PublicKey: user.PublicKey,
-	//	Nonce:     user.Nonce,
-	//	IsAdmin:   user.IsAdmin,
-	//	CreatedAt: user.CreatedAt,
-	//	UpdatedAt: user.UpdatedAt,
-	//}, nil
-	//return nil, nil
 }
 
 // parseRawUserData completes the parsing of a User and returns a reference
