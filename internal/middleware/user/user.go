@@ -122,13 +122,6 @@ func GenerateNonce() (string, error) {
 	return base64.StdEncoding.EncodeToString(msgHash.Sum(nil)), nil
 }
 
-// Login
-func (u User) Login() (string, error) {
-	// TODO: implement
-	// TODO: return JWT
-	return "", fmt.Errorf("not implemented")
-}
-
 // RefreshNonce updates the user nonce
 func (u User) RefreshNonce() error {
 	nonce, err := GenerateNonce()
@@ -140,6 +133,8 @@ func (u User) RefreshNonce() error {
 	return nil
 }
 
+// VerifyUser takes a signature to verify the user and
+// 	returns an error if the signature is invalid
 func (u User) VerifyUser(signature []byte) error {
 
 	block, _ := pem.Decode([]byte(u.PublicKey))
@@ -292,6 +287,13 @@ func UpdateNotes(uid, noteId string) (*User, error) {
 
 // parseRawUserData completes the parsing of a User and returns a reference
 func parseRawUserData(id uuid.UUID, raw map[string]interface{}) *User {
+	var notes string
+	if raw["notes"] == nil {
+		notes = ""
+	} else {
+		notes = raw["notes"].(string)
+	}
+
 	return &User{
 		ID:        id,
 		PublicKey: raw["publicKey"].(string),
@@ -299,6 +301,6 @@ func parseRawUserData(id uuid.UUID, raw map[string]interface{}) *User {
 		IsAdmin:   raw["isAdmin"].(bool),
 		CreatedAt: int64(raw["createdAt"].(float64)),
 		UpdatedAt: int64(raw["updatedAt"].(float64)),
-		Notes:     raw["notes"].(string),
+		Notes:     notes,
 	}
 }

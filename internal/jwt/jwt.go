@@ -75,15 +75,17 @@ func Authenticator(c *gin.Context) (interface{}, error) {
 	}, nil
 }
 
+// IdentityKey is the key used to store the identity key in the GinJWTMiddleware.
 var IdentityKey = "_id"
 
+// AsteroidJWTMiddleware is the middleware for the JWT
 func AsteroidJWTMiddleware() (*jwt.GinJWTMiddleware, error) {
 	secret := []byte("secret key") // TODO: change to env variable for production!
 	return jwt.New(&jwt.GinJWTMiddleware{
 		Realm:      "main",
 		Key:        secret,
-		Timeout:    time.Hour,
-		MaxRefresh: time.Hour,
+		Timeout:    time.Hour * 24 * 7,
+		MaxRefresh: time.Hour * 24 * 7,
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			return Authenticator(c)
 		},

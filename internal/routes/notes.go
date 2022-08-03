@@ -1,6 +1,7 @@
 package routes
 
 import (
+	jwt2 "asteroid-api/internal/jwt"
 	"asteroid-api/internal/middleware/note"
 	"asteroid-api/internal/orbitdb"
 	"github.com/docker/distribution/uuid"
@@ -16,26 +17,19 @@ type Notes struct {
 
 // createReq is the request body for creating a new note
 type createReq struct {
-	UID  string `json:"uid" binding:"required"`
 	Note string `json:"note" binding:"required"`
 }
 
-// InitNotes initializes the notes module
-func InitNotes(router *gin.Engine, db *orbitdb.Database) *Notes {
-	// binding all the following routes to /notes
-	group := router.Group("/notes")
-	notes := Notes{
-		DB:     db,
-		RGroup: group,
-	}
-	group.POST("/", notes.Create)
-	group.GET("/:id", notes.Find)
-
-	return &notes
-}
-
-// Create uses the request body to create a new note
+// Create uses the request body to create a new note on authenticated routes
 func (n Notes) Create(c *gin.Context) {
+	// get user from JWT
+	user := getUserFromJWT(c)
+	if user == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "unable to find user in token"})
+		return
+	}
+
+	// get request body
 	var body createReq
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -43,7 +37,7 @@ func (n Notes) Create(c *gin.Context) {
 	}
 
 	// convert uid to uuid
-	uid, err := uuid.Parse(body.UID)
+	uid, err := uuid.Parse(user.ID)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -65,8 +59,30 @@ func (n Notes) Create(c *gin.Context) {
 	})
 }
 
-// Find returns a note by id
+// getUserFromJWT gets the user from the JWT. It's a helper function.
+func getUserFromJWT(context *gin.Context) *jwt2.User {
+	// get user from JWT
+	tokenUser, exists := context.Get(jwt2.IdentityKey)
+
+	if !exists {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "unable to find user in token"})
+		return nil
+	}
+
+	return tokenUser.(*jwt2.User)
+}
+
+// Find returns a note by id on authenticated routes.
 func (n Notes) Find(context *gin.Context) {
+	// get user from JWT
+	user := getUserFromJWT(context)
+
+	if user == nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "unable to find user in token"})
+		return
+	}
+
+	// get note id from url
 	id := context.Param("id")
 
 	if id == "" {
@@ -76,6 +92,7 @@ func (n Notes) Find(context *gin.Context) {
 		return
 	}
 
+	// parse node id
 	noteID, err := uuid.Parse(id)
 
 	if err != nil {
@@ -85,11 +102,23 @@ func (n Notes) Find(context *gin.Context) {
 		return
 	}
 
+	// note result from database
 	find, err := note.GetNote(noteID)
+	// note owner ID
+	nodeUID := find.UID.String()
 
+	// check if user is the owner of the note
+	if nodeUID != user.ID {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"error": "user does not own note",
+		})
+		return
+	}
+
+	// respond
 	context.JSON(http.StatusOK, gin.H{
 		"id":   find.ID.String(),
-		"uid":  find.UID.String(),
+		"uid":  nodeUID,
 		"note": find.Data,
 	})
 }

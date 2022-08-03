@@ -11,7 +11,7 @@ import (
 // default settings
 var (
 	ipfsURL    = "http://localhost:5001"
-	orbitDbDir = "/data/orbitdb"
+	orbitDbDir = "./data/orbitdb"
 )
 
 // main is the entry point of the program
@@ -32,17 +32,19 @@ func main() {
 	// gin server
 	r := gin.Default()
 
+	// /ping endpoint
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
 
+	// Initialise the auth middleware
+	//   protects the /notes endpoint
+	routes.InitAuth(r, defaultDB)
+
 	// Initialise User Route Module
 	routes.InitUsers(r, defaultDB)
-
-	// Initialise Notes Route Module
-	routes.InitNotes(r, defaultDB)
 
 	// run on port 3000
 	err = r.Run(":3000")
