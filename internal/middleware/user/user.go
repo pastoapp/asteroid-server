@@ -140,7 +140,7 @@ func (u User) RefreshNonce() error {
 	return nil
 }
 
-func (u User) VerifyUser(signature string) error {
+func (u User) VerifyUser(signature []byte) error {
 
 	block, _ := pem.Decode([]byte(u.PublicKey))
 	if block == nil {
@@ -159,7 +159,7 @@ func (u User) VerifyUser(signature string) error {
 		return fmt.Errorf("failed to decode nonce: %s\n", err.Error())
 	}
 
-	return rsa.VerifyPSS(pub, crypto.SHA256, nonce, []byte(signature), nil)
+	return rsa.VerifyPSS(pub, crypto.SHA256, nonce, signature, nil)
 }
 
 // Find finds a user with the corresponding user id.

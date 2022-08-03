@@ -4,8 +4,10 @@ go 1.18
 
 require (
 	berty.tech/go-orbit-db v1.17.1
+	github.com/appleboy/gin-jwt/v2 v2.8.0
 	github.com/docker/distribution v2.8.1+incompatible
 	github.com/gin-gonic/gin v1.8.1
+	github.com/google/uuid v1.3.0
 	github.com/ipfs/go-ipfs-http-client v0.4.0
 )
 
@@ -19,8 +21,8 @@ require (
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/golang-jwt/jwt/v4 v4.2.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/ipfs/bbloom v0.0.4 // indirect
 	github.com/ipfs/go-block-format v0.0.3 // indirect
