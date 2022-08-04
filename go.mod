@@ -6,6 +6,7 @@ require (
 	berty.tech/go-orbit-db v1.17.1
 	github.com/appleboy/gin-jwt/v2 v2.8.0
 	github.com/docker/distribution v2.8.1+incompatible
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/google/uuid v1.3.0
 	github.com/ipfs/go-ipfs-http-client v0.4.0

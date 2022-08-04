@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	odb "gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/orbitdb"
 	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/routes"
@@ -53,6 +54,10 @@ func main() {
 
 	// gin server
 	r := gin.Default()
+
+	// cors
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
 
 	// /ping endpoint
 	r.GET("/ping", func(c *gin.Context) {
