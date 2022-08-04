@@ -58,6 +58,7 @@ func main() {
 	// cors
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
+	r.Use(cors.New(corsConfig))
 
 	// /ping endpoint
 	r.GET("/ping", func(c *gin.Context) {
