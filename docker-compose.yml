@@ -2,12 +2,14 @@ version: '3.9'
 
 services:
   # base IPFS Node
-  ipfs:
+  asteroid-ipfs:
     image: ipfs/kubo:master-2022-07-06-9ce802f
     volumes:
       - ipfs_data:/data/ipfs
       - ipfs_staging:/export
     restart: unless-stopped
+    ports:
+      - "0.0.0.0:5001:5001"
     command: ["daemon",
               "--migrate=true",
               "--agent-version-suffix=docker",
@@ -16,6 +18,8 @@ services:
 
   # Asteroid-API
   asteroid-api:
+    depends_on:
+      - asteroid-ipfs
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,8 +27,8 @@ services:
     ports:
       - "0.0.0.0:3000:3000"
     environment:
-      - IPFS_API_URL=http://ipfs:5001
-      - ORBIT_DB_LOCATION="/data/orbitdb"
+      - IPFS_API_URL=http://asteroid-ipfs:5001
+      - ORBIT_DB_LOCATION=/data/orbitdb
     volumes:
       - orbitdb_data:/data/orbitdb
 

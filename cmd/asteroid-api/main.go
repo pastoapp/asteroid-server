@@ -3,24 +3,26 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/itsjamie/gin-cors"
 	odb "gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/orbitdb"
 	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/routes"
+
 	"log"
 	"os"
+	"time"
 )
 
 // default settings
 var (
-	ipfsURL    = "http://localhost:5001"
-	orbitDbDir = "./data/orbitdb"
+	ipfsURL    string
+	orbitDbDir string
 )
 
 // parse cli flags
 func init() {
-	flag.String("ipfs-url", "http://localhost:5001", "IPFS URL")
-	flag.String("orbitdb-dir", "./data/orbitdb", "OrbitDB directory")
+	flag.StringVar(&ipfsURL, "ipfs-url", "http://localhost:5001", "IPFS URL")
+	flag.StringVar(&orbitDbDir, "orbitdb-dir", "./data/orbitdb", "OrbitDB directory")
 }
 
 // main is the entry point of the program
@@ -42,6 +44,8 @@ func main() {
 	// main database context
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+	log.Println("IPFS URL:", ipfsURL)
+	log.Println("OrbitDB directory:", orbitDbDir)
 	// create a new orbitdb instance
 	cancelODB, err := odb.InitializeOrbitDB(ipfsURL, orbitDbDir)
 	defer cancelODB() // cancel the orbitdb context
@@ -56,9 +60,17 @@ func main() {
 	r := gin.Default()
 
 	// cors
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowAllOrigins = true
-	r.Use(cors.New(corsConfig))
+	// In PoC, we set the Cross-Origin policies to allow all.
+
+	r.Use(cors.Middleware(cors.Config{
+		Origins:         "*",
+		Methods:         "GET, PUT, POST, DELETE",
+		RequestHeaders:  "Origin, Authorization, Content-Type",
+		ExposedHeaders:  "",
+		MaxAge:          50 * time.Second,
+		Credentials:     false,
+		ValidateHeaders: false,
+	}))
 
 	// /ping endpoint
 	r.GET("/ping", func(c *gin.Context) {

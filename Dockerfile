@@ -1,6 +1,6 @@
 FROM golang:1.18-alpine
 
-ARG IPFS_URL="http://ipfs:5001"
+ARG IPFS_URL="http://asteroid-ipfs:5001"
 ARG ORBIT_DB_DIR="/data/orbitdb"
 
 # OrbitDB Location
@@ -28,4 +28,4 @@ RUN mkdir -p $ORBIT_DB_LOCATION
 EXPOSE 3000
 
 # Run the executable
-CMD ["asteroid-api", "-orbitdb-dir", "$ORBIT_DB_LOCATION", "-ipfs-url", "$IPFS_API_URL"]
+CMD ["asteroid-api", "--orbitdb-dir=$ORBIT_DB_LOCATION", "--ipfs-url=$IPFS_API_URL"]

@@ -2,12 +2,14 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	cors "github.com/itsjamie/gin-cors"
 	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/middleware/user"
 	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/orbitdb"
 	"log"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 // init runs on module initialization
@@ -26,6 +28,15 @@ var users Users
 // InitUsers takes the current gin-instance and ODB to create the corresponding routes
 func InitUsers(router *gin.Engine, db *orbitdb.Database) *Users {
 	group := router.Group("/users")
+	group.Use(cors.Middleware(cors.Config{
+		Origins:         "*",
+		Methods:         "GET, PUT, POST, DELETE",
+		RequestHeaders:  "Origin, Authorization, Content-Type",
+		ExposedHeaders:  "",
+		MaxAge:          50 * time.Second,
+		Credentials:     false,
+		ValidateHeaders: false,
+	}))
 	users = Users{
 		DB:     db,
 		RGroup: group,
