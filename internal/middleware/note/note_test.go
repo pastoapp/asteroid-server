@@ -1,13 +1,13 @@
 package note
 
 import (
-	"asteroid-api/internal/middleware/user"
-	"asteroid-api/internal/orbitdb"
 	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/middleware/user"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/orbitdb"
 	"testing"
 )
 

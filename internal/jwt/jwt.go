@@ -1,10 +1,10 @@
 package jwt
 
 import (
-	"asteroid-api/internal/middleware/user"
 	"encoding/base64"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/middleware/user"
 	"log"
 	"time"
 )

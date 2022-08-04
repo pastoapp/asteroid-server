@@ -34,6 +34,7 @@ func InitializeOrbitDB(ipfsApiURL, orbitDbDirectory string) (context.CancelFunc,
 	odb, err := NewOrbitDB(ctx, orbitDbDirectory, ipfsApiURL)
 	if err != nil {
 		log.Print(err)
+		cancel()
 		return nil, err
 	}
 	Client = odb

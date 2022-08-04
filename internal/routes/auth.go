@@ -1,9 +1,9 @@
 package routes
 
 import (
-	jwt2 "asteroid-api/internal/jwt"
-	"asteroid-api/internal/orbitdb"
 	"github.com/gin-gonic/gin"
+	jwt2 "gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/jwt"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/orbitdb"
 	"log"
 )
 

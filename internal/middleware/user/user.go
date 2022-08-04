@@ -1,7 +1,6 @@
 package user
 
 import (
-	"asteroid-api/internal/orbitdb"
 	"context"
 	"crypto"
 	"crypto/rand"
@@ -13,6 +12,7 @@ import (
 	"fmt"
 	"github.com/docker/distribution/uuid"
 	"github.com/gin-gonic/gin"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/orbitdb"
 	"log"
 	"time"
 )

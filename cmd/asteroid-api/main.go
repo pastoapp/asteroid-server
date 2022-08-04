@@ -1,10 +1,10 @@
 package main
 
 import (
-	odb "asteroid-api/internal/orbitdb"
-	"asteroid-api/internal/routes"
 	"context"
 	"github.com/gin-gonic/gin"
+	odb "gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/orbitdb"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/routes"
 	"log"
 )
 

@@ -1,7 +1,6 @@
 package user
 
 import (
-	"asteroid-api/internal/orbitdb"
 	"context"
 	"crypto"
 	"crypto/rand"
@@ -10,6 +9,7 @@ import (
 	"encoding/base64"
 	"encoding/pem"
 	"github.com/google/uuid"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/orbitdb"
 	"testing"
 )
 

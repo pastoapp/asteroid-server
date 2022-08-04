@@ -1,11 +1,11 @@
 package note
 
 import (
-	"asteroid-api/internal/middleware/user"
-	"asteroid-api/internal/orbitdb"
 	"context"
 	"github.com/docker/distribution/uuid"
 	"github.com/gin-gonic/gin"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/middleware/user"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/orbitdb"
 	"log"
 	"time"
 )

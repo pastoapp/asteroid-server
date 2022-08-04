@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"asteroid-api/internal/middleware/user"
-	"asteroid-api/internal/orbitdb"
 	"bytes"
 	"context"
 	"crypto/rand"
@@ -11,6 +9,8 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"github.com/gin-gonic/gin"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/middleware/user"
+	"gitlab.gwdg.de/v.mattfeld/asteroid-server/internal/orbitdb"
 
 	"net/http"
 	"net/http/httptest"

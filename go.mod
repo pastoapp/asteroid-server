@@ -1,4 +1,4 @@
-module asteroid-api
+module gitlab.gwdg.de/v.mattfeld/asteroid-server
 
 go 1.18
 
