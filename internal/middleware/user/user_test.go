@@ -113,7 +113,7 @@ func TestNewUser(t *testing.T) {
 			t.Errorf("error signing the user %v\n", err)
 		}
 
-		err = user.VerifyUser(string(sign))
+		err = user.VerifyUser(sign)
 		if err != nil {
 			t.Errorf("error verifying the user %v\n", err)
 		}
