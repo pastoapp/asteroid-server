@@ -36,15 +36,7 @@ func InitAuth(router *gin.Engine, db *orbitdb.Database) {
 
 	// attach protected routes
 	auth := router.Group("/notes")
-	auth.Use(cors.Middleware(cors.Config{
-		Origins:         "*",
-		Methods:         "GET, PUT, POST, DELETE",
-		RequestHeaders:  "Origin, Authorization, Content-Type",
-		ExposedHeaders:  "",
-		MaxAge:          50 * time.Second,
-		Credentials:     false,
-		ValidateHeaders: false,
-	}))
+	
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
 		// protecting the /notes endpoint
@@ -55,4 +47,14 @@ func InitAuth(router *gin.Engine, db *orbitdb.Database) {
 		auth.POST("/", notes.Create)
 		auth.GET("/:id", notes.Find)
 	}
+
+	auth.Use(cors.Middleware(cors.Config{
+			Origins:         "*",
+			Methods:         "GET, PUT, POST, DELETE",
+			RequestHeaders:  "Origin, Authorization, Content-Type",
+			ExposedHeaders:  "",
+			MaxAge:          50 * time.Second,
+			Credentials:     false,
+			ValidateHeaders: false,
+		}))
 }
