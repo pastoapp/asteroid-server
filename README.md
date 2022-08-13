@@ -19,3 +19,9 @@ It includes but is not limited to:
 - https://github.com/google/uuid
 - https://github.com/ipfs/go-ipfs-http-client
 - https://github.com/itsjamie/gin-cors
+
+## License
+
+Until I make up my mind, this code remains under copyright.
+https://choosealicense.com/no-permission/
+https://github.com/pastoapp/asteroid-server/issues/1
